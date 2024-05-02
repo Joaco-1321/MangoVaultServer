@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MangovaultserverApplication {
+public class MangoVaultServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MangovaultserverApplication.class, args);
+        SpringApplication.run(MangoVaultServerApplication.class, args);
     }
 
 }
