@@ -1,4 +1,4 @@
-package io.joaco.mangovaultserver;
+package io.joaco.mangovaultserver.model;
 
 public class Message {
     private String from;
