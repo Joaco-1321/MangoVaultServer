@@ -1,4 +1,4 @@
-package io.joaco.mangovaultserver.services;
+package io.joaco.mangovaultserver.service;
 
 import io.joaco.mangovaultserver.model.User;
 
