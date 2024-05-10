@@ -1,4 +1,4 @@
-package io.joaco.mangovaultserver;
+package io.joaco.mangovaultserver.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -12,12 +12,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/mangovault");
         registry.addEndpoint("/mangovault").withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.setApplicationDestinationPrefixes("/app");
-        config.enableSimpleBroker("/topic", "/queue");
+        config.enableSimpleBroker("/queue", "/user");
+        config.setUserDestinationPrefix("/user");
     }
 }
