@@ -14,12 +14,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/mangovault");
         registry.addEndpoint("/mangovault").withSockJS();
+        registry.setPreserveReceiveOrder(true);
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.setApplicationDestinationPrefixes("/app");
-        config.enableSimpleBroker("/queue", "/user");
+        config.enableSimpleBroker("/queue/chat");
         config.setUserDestinationPrefix("/user");
+        config.setPreservePublishOrder(true);
     }
 }
