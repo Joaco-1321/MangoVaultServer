@@ -1,6 +1,6 @@
 package io.joaco.mangovaultserver.controller;
 
-import io.joaco.mangovaultserver.model.Message;
+import io.joaco.mangovaultserver.persistence.model.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

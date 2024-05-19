@@ -1,4 +1,4 @@
-package io.joaco.mangovaultserver.model;
+package io.joaco.mangovaultserver.persistence.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
