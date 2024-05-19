@@ -1,6 +1,7 @@
 package io.joaco.mangovaultserver.service;
 
 import io.joaco.mangovaultserver.dto.UserData;
+import io.joaco.mangovaultserver.exception.UsernameAlreadyExists;
 import io.joaco.mangovaultserver.persistence.dao.UserRepository;
 import io.joaco.mangovaultserver.persistence.model.Role;
 import io.joaco.mangovaultserver.persistence.model.User;
@@ -16,9 +17,9 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public void register(UserData user) {
+    public void register(UserData user) throws UsernameAlreadyExists {
         if (userExists(user.getUsername())) {
-            return;
+            throw new UsernameAlreadyExists();
         }
 
         userRepository.save(User.builder()
