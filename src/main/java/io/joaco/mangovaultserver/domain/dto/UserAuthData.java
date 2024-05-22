@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
-public class UserData {
+public class UserAuthData {
 
     @Pattern(regexp = "^[a-zA-Z]\\w{2,}[a-zA-Z0-9]$",
              message = """
