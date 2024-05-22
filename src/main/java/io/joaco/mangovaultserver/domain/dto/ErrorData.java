@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Singular;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Builder
@@ -13,5 +15,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class ErrorData {
 
-    private Map<String, String> errors;
+    @Singular
+    private Map<String, String> errors = new HashMap<>();
 }
