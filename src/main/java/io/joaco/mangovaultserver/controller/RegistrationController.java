@@ -1,7 +1,7 @@
 package io.joaco.mangovaultserver.controller;
 
-import io.joaco.mangovaultserver.dto.UserData;
-import io.joaco.mangovaultserver.exception.UsernameAlreadyExists;
+import io.joaco.mangovaultserver.domain.dto.UserAuthData;
+import io.joaco.mangovaultserver.exception.UsernameAlreadyExistsException;
 import io.joaco.mangovaultserver.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +27,8 @@ public class RegistrationController {
     private final UserService userService;
 
     @PostMapping("/user")
-    ResponseEntity<Map<String, String>> register(@Valid @RequestBody UserData user) {
-        Map<String, String> response = new HashMap<>();
-
-        userService.register(user);
-
-        response.put("message", "user registered successfully");
-
-        return ResponseEntity.ok(response);
+    ResponseEntity<?> register(@Valid @RequestBody UserAuthData user) {
+        return ResponseEntity.ok(userService.register(user));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -50,8 +44,8 @@ public class RegistrationController {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(UsernameAlreadyExists.class)
-    public Map<String, String> handleUsernameAlreadyExistsException(UsernameAlreadyExists ex) {
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public Map<String, String> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
         Map<String, String> errors = new HashMap<>();
 
         errors.put("error", ex.getMessage());

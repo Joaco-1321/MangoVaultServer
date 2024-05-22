@@ -1,14 +1,17 @@
 package io.joaco.mangovaultserver.service;
 
-import io.joaco.mangovaultserver.dto.UserData;
-import io.joaco.mangovaultserver.exception.UsernameAlreadyExists;
-import io.joaco.mangovaultserver.persistence.dao.RoleRepository;
-import io.joaco.mangovaultserver.persistence.dao.UserRepository;
-import io.joaco.mangovaultserver.persistence.model.Role;
-import io.joaco.mangovaultserver.persistence.model.User;
+import io.joaco.mangovaultserver.domain.dto.UserAuthData;
+import io.joaco.mangovaultserver.domain.dto.UserDetailsData;
+import io.joaco.mangovaultserver.exception.UsernameAlreadyExistsException;
+import io.joaco.mangovaultserver.domain.dao.RoleRepository;
+import io.joaco.mangovaultserver.domain.dao.UserRepository;
+import io.joaco.mangovaultserver.domain.model.Role;
+import io.joaco.mangovaultserver.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -20,20 +23,29 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public void register(UserData user) throws UsernameAlreadyExists {
+    public UserDetailsData register(UserAuthData user) throws UsernameAlreadyExistsException {
         if (userExists(user.getUsername())) {
-            throw new UsernameAlreadyExists("username already exists");
+            throw new UsernameAlreadyExistsException("username already exists");
         }
+
+        User newUser;
 
         roleRepository.save(Role.builder()
                                 .role("USER")
-                                .user(userRepository.save(User.builder()
-                                                              .username(user.getUsername())
-                                                              .password(passwordEncoder.encode(user.getPassword()))
-                                                              .enabled(true)
-                                                              .build()))
+                                .user((newUser = userRepository.save(User.builder()
+                                                                         .username(user.getUsername())
+                                                                         .passwordHash(passwordEncoder.encode(user.getPassword()))
+                                                                         .enabled(true)
+                                                                         .build())))
                                 .build());
-        ;
+
+        return UserDetailsData.builder()
+                              .username(newUser.getUsername())
+                              .friends(newUser.getFriends()
+                                              .stream()
+                                              .map(User::getUsername)
+                                              .collect(Collectors.toSet()))
+                              .build();
     }
 
     private boolean userExists(String username) {

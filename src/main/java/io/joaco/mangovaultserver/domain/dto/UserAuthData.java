@@ -1,4 +1,4 @@
-package io.joaco.mangovaultserver.dto;
+package io.joaco.mangovaultserver.domain.dto;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;

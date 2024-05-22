@@ -1,4 +1,4 @@
-package io.joaco.mangovaultserver.persistence.model;
+package io.joaco.mangovaultserver.domain.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

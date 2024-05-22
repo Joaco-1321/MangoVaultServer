@@ -1,6 +1,6 @@
-package io.joaco.mangovaultserver.persistence.dao;
+package io.joaco.mangovaultserver.domain.dao;
 
-import io.joaco.mangovaultserver.persistence.model.User;
+import io.joaco.mangovaultserver.domain.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
