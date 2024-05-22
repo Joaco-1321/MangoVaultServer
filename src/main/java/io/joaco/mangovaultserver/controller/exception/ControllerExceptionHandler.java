@@ -28,7 +28,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(UsernameAlreadyExistsException.class)
-    public ResponseEntity<?> handleUsernameAlreadyExists(UsernameAlreadyExistsException ex, WebRequest request) {
+    public ResponseEntity<?> handleUsernameAlreadyExists(UsernameAlreadyExistsException ex) {
         return ResponseEntity.badRequest()
                              .body(ErrorData.builder()
                                             .error("username", ex.getMessage())
