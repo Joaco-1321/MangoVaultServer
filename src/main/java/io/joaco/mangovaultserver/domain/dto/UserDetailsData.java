@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Builder
@@ -15,5 +16,6 @@ public class UserDetailsData {
 
     private String username;
 
-    private Set<String> friends;
+    @Builder.Default
+    private Set<String> friends = new HashSet<>();
 }

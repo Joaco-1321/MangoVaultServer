@@ -40,15 +40,17 @@ public class FriendRequest {
     @JoinColumn(name = "recipient_id", nullable = false)
     private User recipient;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private FriendRequestStatus status;
+    private FriendRequestStatus status = FriendRequestStatus.PENDING;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     public enum FriendRequestStatus {
+        CANCELED,
         PENDING,
         ACCEPTED,
         REJECTED

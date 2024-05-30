@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,6 +23,7 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final DataSource dataSource;
@@ -53,7 +55,7 @@ public class SecurityConfig {
 
         manager.setUsernameBasedPrimaryKey(false);
         manager.setUsersByUsernameQuery("SELECT username, password_hash, enabled FROM users WHERE username = ?");
-        manager.setAuthoritiesByUsernameQuery("SELECT u.username, r.role FROM roles r JOIN users u ON u.id = r.user_id WHERE u.username = ?");
+        manager.setAuthoritiesByUsernameQuery("SELECT username, role FROM users WHERE username = ?");
 
         return manager;
     }

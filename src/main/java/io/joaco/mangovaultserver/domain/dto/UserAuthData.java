@@ -14,12 +14,12 @@ public class UserAuthData {
                        must not end with an "_".""")
     private String username;
 
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\s:])(\\S){8,16}$",
-             message = """
-                       must be between 8 and 16 characters long with no space.
-                       must contain at least 1 number.
-                       must contain at least 1 uppercase letter.
-                       must contain at least 1 lowercase letter.
-                       must contain at least 1 non-alphanumeric character.""")
+//    @Pattern(regexp = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\s:])(\\S){8,16}$",
+//             message = """
+//                       must be between 8 and 16 characters long with no space.
+//                       must contain at least 1 number.
+//                       must contain at least 1 uppercase letter.
+//                       must contain at least 1 lowercase letter.
+//                       must contain at least 1 non-alphanumeric character.""")
     private String password;
 }

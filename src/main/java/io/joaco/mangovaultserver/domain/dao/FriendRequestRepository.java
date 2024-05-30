@@ -1,14 +1,14 @@
 package io.joaco.mangovaultserver.domain.dao;
 
 import io.joaco.mangovaultserver.domain.model.FriendRequest;
-import io.joaco.mangovaultserver.domain.model.FriendRequest.FriendRequestStatus;
-import org.springframework.data.jpa.repository.JpaRepository;
+import io.joaco.mangovaultserver.domain.model.User;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface FriendRequestRepository extends JpaRepository<FriendRequest, Long> {
+@Repository
+public interface FriendRequestRepository extends CrudRepository<FriendRequest, Long> {
 
-    List<FriendRequest> findByRecipientAndStatus(String recipient, FriendRequestStatus status);
-
-    List<FriendRequest> findByRequesterAndStatus(String requester, FriendRequestStatus status);
+    Optional<FriendRequest> findByRequesterAndRecipient(User requester, User recipient);
 }

@@ -1,7 +1,7 @@
 package io.joaco.mangovaultserver.controller;
 
 import io.joaco.mangovaultserver.domain.dto.UserAuthData;
-import io.joaco.mangovaultserver.service.UserService;
+import io.joaco.mangovaultserver.facade.UserFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class RegistrationController {
 
-    private final UserService userService;
+    private final UserFacade userFacade;
 
     @PostMapping("/user")
     ResponseEntity<?> register(@Valid @RequestBody UserAuthData user) {
-        return ResponseEntity.ok(userService.register(user));
+        return ResponseEntity.ok(userFacade.registerUser(user));
     }
 }

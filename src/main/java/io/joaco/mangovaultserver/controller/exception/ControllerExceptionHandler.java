@@ -1,7 +1,9 @@
 package io.joaco.mangovaultserver.controller.exception;
 
 import io.joaco.mangovaultserver.domain.dto.ErrorData;
-import io.joaco.mangovaultserver.exception.UsernameAlreadyExistsException;
+import io.joaco.mangovaultserver.exception.AlreadyExistsException;
+import io.joaco.mangovaultserver.exception.GenericKeyException;
+import io.joaco.mangovaultserver.exception.NotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +29,11 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, errorData, headers, status, request);
     }
 
-    @ExceptionHandler(UsernameAlreadyExistsException.class)
-    public ResponseEntity<?> handleUsernameAlreadyExists(UsernameAlreadyExistsException ex) {
+    @ExceptionHandler({AlreadyExistsException.class, NotFoundException.class})
+    public ResponseEntity<?> handleUsernameAlreadyExists(GenericKeyException ex) {
         return ResponseEntity.badRequest()
                              .body(ErrorData.builder()
-                                            .error("username", ex.getMessage())
+                                            .error(ex.getKey(), ex.getMessage())
                                             .build());
     }
 }

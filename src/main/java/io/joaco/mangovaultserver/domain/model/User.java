@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Singular;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -43,26 +44,29 @@ public class User {
             nullable = false)
     private String passwordHash;
 
+    @Builder.Default
     @Column(nullable = false)
-    private boolean enabled;
+    private boolean enabled = true;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private String role = "USER";
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @OneToMany
-    private Set<Role> roles;
-
+    @Singular
     @OneToMany(mappedBy = "requester")
     private Set<FriendRequest> sentFriendRequests = new HashSet<>();
 
+    @Singular
     @OneToMany(mappedBy = "recipient")
     private Set<FriendRequest> receivedFriendRequests = new HashSet<>();
 
+    @Singular
     @ManyToMany
-    @JoinTable(
-            name = "friends",
-            joinColumns = @JoinColumn(name = "user_id1"),
-            inverseJoinColumns = @JoinColumn(name = "user_id2")
-    )
+    @JoinTable(name = "friends",
+               joinColumns = @JoinColumn(name = "user_id1"),
+               inverseJoinColumns = @JoinColumn(name = "user_id2"))
     private Set<User> friends = new HashSet<>();
 }
