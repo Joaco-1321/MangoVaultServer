@@ -8,6 +8,8 @@ import io.joaco.mangovaultserver.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @RequiredArgsConstructor
 @Service
 public class FriendRequestService {
@@ -18,6 +20,10 @@ public class FriendRequestService {
         return friendRequestRepository.findByRequesterAndRecipient(requester, recipient)
                                       .orElseThrow(() -> new NotFoundException("friend request",
                                                                                "friend request not found"));
+    }
+
+    public Set<FriendRequest> findByRequesterOrRecipient(String username) {
+        return friendRequestRepository.findByRequesterOrRecipient(username);
     }
 
     public void exists(User requester, User recipient) {

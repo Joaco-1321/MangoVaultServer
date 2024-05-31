@@ -32,9 +32,18 @@ public class FriendFacade {
                           .collect(Collectors.toSet());
     }
 
-//    public Set<FriendRequestData> getFriendRequestsByUsername(String username) {
-//        return friendRequestService.
-//    }
+    public Set<FriendRequestData> getFriendRequestsByUsername(String username) {
+        return friendRequestService.findByRequesterOrRecipient(username)
+                                   .stream()
+                                   .map(request -> FriendRequestData.builder()
+                                                                    .requester(request.getRequester()
+                                                                                      .getUsername())
+                                                                    .recipient(request.getRecipient()
+                                                                                      .getUsername())
+                                                                    .status(request.getStatus())
+                                                                    .build())
+                                   .collect(Collectors.toSet());
+    }
 
     public void sendFriendRequest(FriendRequestData friendRequestdata) {
         User requester = userService.findByUsername(friendRequestdata.getRequester());

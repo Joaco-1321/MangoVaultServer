@@ -28,6 +28,11 @@ public class FriendController {
         return ResponseEntity.ok(friendFacade.getFriendsByUsername(principal.getName()));
     }
 
+    @GetMapping("/request")
+    public ResponseEntity<?> getFriendRequests(Principal principal) {
+        return ResponseEntity.ok(friendFacade.getFriendRequestsByUsername(principal.getName()));
+    }
+
     @DeleteMapping("/{username}")
     public ResponseEntity<?> removeFriend(Principal principal, @PathVariable String username) {
         friendFacade.removeFriend(principal.getName(), username);
