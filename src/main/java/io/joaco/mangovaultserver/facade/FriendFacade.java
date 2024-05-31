@@ -49,12 +49,16 @@ public class FriendFacade {
         User requester = userService.findByUsername(friendRequestdata.getRequester());
         User recipient = userService.findByUsername(friendRequestdata.getRecipient());
 
-        friendRequestService.exists(requester, recipient);
+        friendRequestService.throwIfUnavailable(requester, recipient);
 
-        friendRequestService.save(FriendRequest.builder()
-                                               .requester(requester)
-                                               .recipient(recipient)
-                                               .build());
+        FriendRequest request = friendRequestService.getByRequesterAndRecipientOrElseNew(requester, recipient);
+
+        if (request.getStatus() == FriendRequestStatus.CANCELED || request.getStatus() == FriendRequestStatus.REJECTED) {
+            request.setStatus(FriendRequestStatus.PENDING);
+            friendRequestdata.setStatus(FriendRequestStatus.PENDING);
+        }
+
+        friendRequestService.save(request);
 
         messagingTemplate.convertAndSendToUser(recipient.getUsername(), "/queue/notification", friendRequestdata);
     }
