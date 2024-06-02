@@ -4,12 +4,14 @@ import io.joaco.mangovaultserver.domain.dto.FriendRequestData;
 import io.joaco.mangovaultserver.domain.model.FriendRequest;
 import io.joaco.mangovaultserver.domain.model.FriendRequest.FriendRequestStatus;
 import io.joaco.mangovaultserver.domain.model.User;
+import io.joaco.mangovaultserver.exception.GenericKeyException;
 import io.joaco.mangovaultserver.service.FriendRequestService;
 import io.joaco.mangovaultserver.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Set;
@@ -69,13 +71,19 @@ public class FriendFacade {
 
     public void acceptFriendRequest(FriendRequestData friendRequestData) {
         FriendRequest request = operateFriendRequest(friendRequestData, FriendRequestStatus.ACCEPTED);
-
         User requester = request.getRequester();
+        User recipient = request.getRecipient();
 
-        requester.getFriends()
-                 .add(request.getRecipient());
+        if (requester.getId() < recipient.getId()) {
+            requester.getFriends()
+                     .add(recipient);
+        } else {
+            recipient.getFriends()
+                     .add(requester);
+        }
 
         userService.save(requester);
+        userService.save(recipient);
     }
 
     public void rejectFriendRequest(FriendRequestData friendRequestData) {
@@ -94,13 +102,18 @@ public class FriendFacade {
         });
     }
 
+    @Transactional
+    public void isFriendOrThrow(String username1, String username2) {
+        isFriend(username1, username2).orElseThrow(() -> new GenericKeyException("friend", "users are not friends"));
+    }
+
     private Optional<Pair<User, User>> isFriend(String username1, String username2) {
         User requester = userService.findByUsername(username1);
         User recipient = userService.findByUsername(username2);
         Optional<Pair<User, User>> friends = Optional.empty();
 
-        if (requester.getFriends()
-                     .contains(recipient)) {
+        if (userService.getFriends(requester.getUsername())
+                       .contains(recipient)) {
             friends = Optional.of(Pair.of(requester, recipient));
         }
 

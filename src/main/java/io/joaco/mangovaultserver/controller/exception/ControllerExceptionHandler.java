@@ -29,7 +29,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, errorData, headers, status, request);
     }
 
-    @ExceptionHandler({AlreadyExistsException.class, NotFoundException.class})
+    @ExceptionHandler({AlreadyExistsException.class, NotFoundException.class, GenericKeyException.class})
     public ResponseEntity<?> handleUsernameAlreadyExists(GenericKeyException ex) {
         return ResponseEntity.badRequest()
                              .body(ErrorData.builder()

@@ -20,6 +20,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Builder
@@ -69,4 +70,19 @@ public class User {
                joinColumns = @JoinColumn(name = "user_id1"),
                inverseJoinColumns = @JoinColumn(name = "user_id2"))
     private Set<User> friends = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return enabled == user.enabled && Objects.equals(id, user.id) && Objects.equals(username,
+                                                                                        user.username) && Objects.equals(
+                passwordHash,
+                user.passwordHash) && Objects.equals(role, user.role) && Objects.equals(createdAt, user.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, passwordHash, enabled, role, createdAt);
+    }
 }

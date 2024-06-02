@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Message {
 
-    private String from;
-    private String to;
+    private String sender;
+    private String recipient;
     private String message;
+    private Long timestamp;
 }
 
