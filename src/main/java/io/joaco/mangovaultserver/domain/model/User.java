@@ -45,6 +45,8 @@ public class User {
             nullable = false)
     private String passwordHash;
 
+    private String publicKeyEncoded;
+
     @Builder.Default
     @Column(nullable = false)
     private boolean enabled = true;

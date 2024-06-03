@@ -14,6 +14,8 @@ public class UserFacade {
 
     private final UserService userService;
 
+    private final FriendFacade friendFacade;
+
     private final PasswordEncoder passwordEncoder;
 
     public UserDetailsData registerUser(UserAuthData userAuthData) {
@@ -27,5 +29,19 @@ public class UserFacade {
         return UserDetailsData.builder()
                               .username(newUser.getUsername())
                               .build();
+    }
+
+    public String getKey(String username, String friend) {
+        friendFacade.isFriendOrThrow(username, friend);
+
+        return userService.findByUsername(friend).getPublicKeyEncoded();
+    }
+
+    public void publishKey(String username, String key) {
+        User user = userService.findByUsername(username);
+
+        user.setPublicKeyEncoded(key);
+
+        userService.save(user);
     }
 }

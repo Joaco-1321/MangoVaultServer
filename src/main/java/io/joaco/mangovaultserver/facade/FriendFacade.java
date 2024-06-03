@@ -62,7 +62,7 @@ public class FriendFacade {
 
         friendRequestService.save(request);
 
-        messagingTemplate.convertAndSendToUser(recipient.getUsername(), "/queue/notification", friendRequestdata);
+        messagingTemplate.convertAndSendToUser(recipient.getUsername(), "/queue/notification/request", friendRequestdata);
     }
 
     public void cancelFriendRequest(FriendRequestData friendRequestData) {
@@ -131,7 +131,7 @@ public class FriendFacade {
         messagingTemplate.convertAndSendToUser(status == FriendRequestStatus.CANCELED
                                                        ? recipient.getUsername()
                                                        : requester.getUsername(),
-                                               "/queue/notification",
+                                               "/queue/notification/request",
                                                friendRequestData);
 
         return request;
