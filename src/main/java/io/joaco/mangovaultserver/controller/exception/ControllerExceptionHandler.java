@@ -4,6 +4,7 @@ import io.joaco.mangovaultserver.domain.dto.ErrorData;
 import io.joaco.mangovaultserver.exception.AlreadyExistsException;
 import io.joaco.mangovaultserver.exception.GenericKeyException;
 import io.joaco.mangovaultserver.exception.NotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +30,19 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, errorData, headers, status, request);
     }
 
-    @ExceptionHandler({AlreadyExistsException.class, NotFoundException.class, GenericKeyException.class})
+    @ExceptionHandler({ AlreadyExistsException.class, NotFoundException.class, GenericKeyException.class })
     public ResponseEntity<?> handleUsernameAlreadyExists(GenericKeyException ex) {
         return ResponseEntity.badRequest()
                              .body(ErrorData.builder()
                                             .error(ex.getKey(), ex.getMessage())
+                                            .build());
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> handleUsernameAlreadyExists(ConstraintViolationException ex) {
+        return ResponseEntity.badRequest()
+                             .body(ErrorData.builder()
+                                            .error("misc", ex.getMessage())
                                             .build());
     }
 }

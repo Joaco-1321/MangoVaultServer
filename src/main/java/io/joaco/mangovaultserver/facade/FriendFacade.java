@@ -62,7 +62,9 @@ public class FriendFacade {
 
         friendRequestService.save(request);
 
-        messagingTemplate.convertAndSendToUser(recipient.getUsername(), "/queue/notification/request", friendRequestdata);
+        messagingTemplate.convertAndSendToUser(recipient.getUsername(),
+                                               "/queue/notification/request",
+                                               friendRequestdata);
     }
 
     public void cancelFriendRequest(FriendRequestData friendRequestData) {
@@ -90,15 +92,33 @@ public class FriendFacade {
         operateFriendRequest(friendRequestData, FriendRequestStatus.REJECTED);
     }
 
+    @Transactional
     public void removeFriend(String username1, String username2) {
         Optional<Pair<User, User>> friends = isFriend(username1, username2);
 
         friends.ifPresent((pair) -> {
-            pair.getFirst()
-                .getFriends()
-                .remove(pair.getSecond());
+            User first = pair.getFirst();
+            User second = pair.getSecond();
 
-            userService.save(pair.getFirst());
+            first.getFriends().remove(second);
+            second.getFriends().remove(first);
+
+            friendRequestService.findByRequesterAndRecipientOptional(first, second)
+                                .ifPresent(request -> {
+                                    request.setStatus(FriendRequestStatus.CANCELED);
+                                    friendRequestService.save(request);
+                                });
+
+            friendRequestService.findByRequesterAndRecipientOptional(second, first)
+                                .ifPresent(request -> {
+                                    request.setStatus(FriendRequestStatus.CANCELED);
+                                    friendRequestService.save(request);
+                                });
+
+            userService.save(first);
+            userService.save(second);
+
+            messagingTemplate.convertAndSendToUser(username2, "/queue/notification/remove", username1);
         });
     }
 

@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Check;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Check(constraints = "requester_id != recipient_id")
 @Table(name = "friend_requests")
 public class FriendRequest {
 
@@ -33,11 +35,13 @@ public class FriendRequest {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "requester_id", nullable = false)
+    @JoinColumn(name = "requester_id",
+                nullable = false)
     private User requester;
 
     @ManyToOne
-    @JoinColumn(name = "recipient_id", nullable = false)
+    @JoinColumn(name = "recipient_id",
+                nullable = false)
     private User recipient;
 
     @Builder.Default
@@ -46,13 +50,11 @@ public class FriendRequest {
     private FriendRequestStatus status = FriendRequestStatus.PENDING;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false,
+            updatable = false)
     private LocalDateTime createdAt;
 
     public enum FriendRequestStatus {
-        CANCELED,
-        PENDING,
-        ACCEPTED,
-        REJECTED
+        CANCELED, PENDING, ACCEPTED, REJECTED
     }
 }

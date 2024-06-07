@@ -1,5 +1,6 @@
 package io.joaco.mangovaultserver.domain.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -67,7 +68,7 @@ public class User {
     private Set<FriendRequest> receivedFriendRequests = new HashSet<>();
 
     @Singular
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "friends",
                joinColumns = @JoinColumn(name = "user_id1"),
                inverseJoinColumns = @JoinColumn(name = "user_id2"))
